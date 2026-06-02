@@ -24,6 +24,8 @@ export interface GenerateSingleImageRequest {
   prompt: string;
   ratio?: string;
   resolution?: string;
+  api_key?: string;
+  base_url?: string;
 }
 
 export interface EditImageRequest {

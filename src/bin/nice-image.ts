@@ -67,6 +67,8 @@ nice-image generate-single — Generate one image from a prompt (Huoke backend)
   -p, --prompt <text>     Image description (required)
   --ratio <ratio>         Aspect ratio: 1:1, 16:9, 9:16, 4:3, 3:4
   --resolution <res>      Resolution: 1k, 2k, 4k
+  --api-key <key>         Custom AI API key (overrides server default)
+  --base-url <url>        Custom AI API base URL (overrides server default)
 `,
 
   "edit-image": `
@@ -210,6 +212,8 @@ async function cmdGenerateSingle(
       prompt: { type: "string", short: "p" },
       ratio: { type: "string" },
       resolution: { type: "string" },
+      "api-key": { type: "string" },
+      "base-url": { type: "string" },
       help: { type: "boolean", short: "h" },
     },
     allowPositionals: false,
@@ -228,6 +232,8 @@ async function cmdGenerateSingle(
     prompt,
     ratio: str(args.values.ratio),
     resolution: str(args.values.resolution),
+    api_key: str(args.values["api-key"]) || process.env["HUOKE_AI_API_KEY"],
+    base_url: str(args.values["base-url"]) || process.env["HUOKE_AI_BASE_URL"],
   };
 
   process.stderr.write("⏳ Generating single image via Huoke...\n");
