@@ -19,8 +19,6 @@ AI 产品图片生成命令行工具，专为 **Claude Code** 及其他 AI Agent
 - **Node.js >= 18**（[下载安装](https://nodejs.org/)）
 - 一个 Nice-Token API Key（用于文生图/编辑/融合）
 
-> 如果你已经有 Huoke 后端服务，也可以用 `nice-image` 命令连接你自己的服务。
-
 ### 安装
 
 #### Claude Code（一行命令）
@@ -39,6 +37,13 @@ git clone https://github.com/shuolol/Gpt-image-2-claude-code.git ~/.claude/skill
 ```bash
 git clone https://github.com/shuolol/Gpt-image-2-claude-code.git ~/.agents/skills/nice-image \
   && bash ~/.agents/skills/nice-image/install.sh
+```
+
+#### OpenClaw（一行命令）
+
+```bash
+git clone https://github.com/shuolol/Gpt-image-2-claude-code.git ~/.openclaw/skills/nice-image \
+  && bash ~/.openclaw/skills/nice-image/install.sh
 ```
 
 #### 手动 / 其他 agent / 直接命令行
@@ -224,6 +229,13 @@ After install, Claude auto-discovers the skill on the next image request — no 
 ```bash
 git clone https://github.com/shuolol/Gpt-image-2-claude-code.git ~/.agents/skills/nice-image \
   && bash ~/.agents/skills/nice-image/install.sh
+```
+
+#### OpenClaw (one-liner)
+
+```bash
+git clone https://github.com/shuolol/Gpt-image-2-claude-code.git ~/.openclaw/skills/nice-image \
+  && bash ~/.openclaw/skills/nice-image/install.sh
 ```
 
 #### Manual / other agents / direct CLI

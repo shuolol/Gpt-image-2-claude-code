@@ -9,6 +9,7 @@ set -euo pipefail
 SKILL_NAME="nice-image"
 SKILL_DIR="$HOME/.claude/skills/$SKILL_NAME"
 CODX_DIR="$HOME/.agents/skills/$SKILL_NAME"
+OPENCLAW_DIR="$HOME/.openclaw/skills/$SKILL_NAME"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -98,6 +99,11 @@ echo -e "  ${GREEN}✓${NC} Claude Code: $SKILL_DIR"
 mkdir -p "$CODX_DIR"
 cp "$SCRIPT_DIR/SKILL.md" "$CODX_DIR/SKILL.md" 2>/dev/null || true
 echo -e "  ${GREEN}✓${NC} Codex: $CODX_DIR"
+
+# OpenClaw
+mkdir -p "$OPENCLAW_DIR"
+cp "$SCRIPT_DIR/SKILL.md" "$OPENCLAW_DIR/SKILL.md" 2>/dev/null || true
+echo -e "  ${GREEN}✓${NC} OpenClaw: $OPENCLAW_DIR"
 
 # ── 5. Configure API key ──
 echo ""
