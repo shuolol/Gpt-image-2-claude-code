@@ -4,13 +4,11 @@
   "description": "GPT-Image-2 AI product image generation CLI for Claude Code & AI Agents — supports text-to-image, image editing, image blending, and batch generation",
   "type": "module",
   "bin": {
-    "magic-image": "./dist/bin/run.js",
-    "huoke-image": "./dist/bin/huoke-image.js"
+    "nice-image": "./dist/bin/nice-image.js"
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsx src/bin/run.ts",
-    "dev:huoke": "tsx src/bin/huoke-image.ts"
+    "dev": "tsx src/bin/nice-image.ts"
   },
   "dependencies": {
     "dotenv": "^16.5.0"
