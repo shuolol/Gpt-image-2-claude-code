@@ -32,17 +32,11 @@ git clone https://github.com/shuolol/Gpt-image-2-claude-code.git ~/.claude/skill
 
 装完之后下一次有图像请求 Claude 自动发现 skill——不用重启，不用注册。
 
-**Windows PowerShell 安装：**
+**Windows PowerShell 安装（一行命令，支持覆盖安装/升级）：**
 
 ```powershell
-# 1. 先克隆仓库
-git clone https://github.com/shuolol/Gpt-image-2-claude-code.git $env:USERPROFILE\.claude\skills\nice-image
-
-# 2. 运行 PowerShell 安装脚本
-powershell -ExecutionPolicy Bypass -File $env:USERPROFILE\.claude\skills\nice-image\install.ps1
+if (Test-Path $env:USERPROFILE\.claude\skills\nice-image) { cd $env:USERPROFILE\.claude\skills\nice-image; git pull } else { git clone https://github.com/shuolol/Gpt-image-2-claude-code.git $env:USERPROFILE\.claude\skills\nice-image; cd $env:USERPROFILE\.claude\skills\nice-image }; powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
-
-> Windows 下用 `[Environment]::SetEnvironmentVariable` 持久化 API Key，重启终端后自动生效。
 
 #### Codex（或任何扫描 `~/.agents/skills/` 的 agent）
 
@@ -236,17 +230,11 @@ The installer handles: dependencies → build → global CLI install → env var
 
 After install, Claude auto-discovers the skill on the next image request — no restart, no registration.
 
-**Windows PowerShell install:**
+**Windows PowerShell install (one-liner, handles fresh install + upgrade):**
 
 ```powershell
-# 1. Clone the repo first
-git clone https://github.com/shuolol/Gpt-image-2-claude-code.git $env:USERPROFILE\.claude\skills\nice-image
-
-# 2. Run the PowerShell installer
-powershell -ExecutionPolicy Bypass -File $env:USERPROFILE\.claude\skills\nice-image\install.ps1
+if (Test-Path $env:USERPROFILE\.claude\skills\nice-image) { cd $env:USERPROFILE\.claude\skills\nice-image; git pull } else { git clone https://github.com/shuolol/Gpt-image-2-claude-code.git $env:USERPROFILE\.claude\skills\nice-image; cd $env:USERPROFILE\.claude\skills\nice-image }; powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
-
-> On Windows, `[Environment]::SetEnvironmentVariable` persists the API key — it takes effect after restarting the terminal.
 
 #### Codex (or any agent scanning `~/.agents/skills/`)
 

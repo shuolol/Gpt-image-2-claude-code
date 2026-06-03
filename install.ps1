@@ -18,7 +18,7 @@ Write-Host "══════════════════════�
 Write-Host ""
 
 # ── 1. Check prerequisites ──
-Write-Host "[1/4] Checking prerequisites..." -ForegroundColor Yellow
+Write-Host "[1/5] Checking prerequisites..." -ForegroundColor Yellow
 
 try {
     $nodeVersion = (node -v) -replace '^v', ''
@@ -43,11 +43,35 @@ try {
 }
 Write-Host "  ✓ npm v$npmVersion" -ForegroundColor Green
 
-# ── 2. Install project ──
+# ── 2. Pull latest version ──
 Write-Host ""
-Write-Host "[2/4] Installing nice-image CLI..." -ForegroundColor Yellow
+Write-Host "[2/5] Updating to latest version..." -ForegroundColor Yellow
 
 Set-Location $ScriptDir
+
+# Check if we're in a git repo and pull latest
+$isGitRepo = (git rev-parse --is-inside-work-tree 2>$null) -eq "true"
+if ($isGitRepo) {
+    Write-Host "  Pulling latest from remote..."
+    git pull --ff-only 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "  ✓ Already up to date" -ForegroundColor Green
+    } else {
+        # Try with rebase fallback if ff-only fails (e.g. local changes)
+        git pull --rebase 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "  ✓ Updated via rebase" -ForegroundColor Green
+        } else {
+            Write-Host "  ⚠ Could not pull latest — continuing with local version" -ForegroundColor Yellow
+        }
+    }
+} else {
+    Write-Host "  ⚠ Not a git repo — skipping update check" -ForegroundColor Yellow
+}
+
+# ── 3. Install project ──
+Write-Host ""
+Write-Host "[3/5] Installing nice-image CLI..." -ForegroundColor Yellow
 
 npm install --silent
 if ($LASTEXITCODE -ne 0) { throw "npm install failed" }
@@ -61,9 +85,9 @@ if ($LASTEXITCODE -ne 0) { throw "global install failed" }
 Write-Host "  ✓ nice-image installed globally" -ForegroundColor Green
 Write-Host "  ✓ huoke-image subcommands available" -ForegroundColor Green
 
-# ── 3. Install skill files ──
+# ── 4. Install skill files ──
 Write-Host ""
-Write-Host "[3/4] Installing skill for Claude Code..." -ForegroundColor Yellow
+Write-Host "[4/5] Installing skill for Claude Code..." -ForegroundColor Yellow
 
 # Claude Code
 New-Item -ItemType Directory -Force -Path $SkillDir | Out-Null
@@ -81,9 +105,9 @@ New-Item -ItemType Directory -Force -Path $OpenClawDir | Out-Null
 Copy-Item "$ScriptDir\SKILL.md" "$OpenClawDir\SKILL.md" -Force -ErrorAction SilentlyContinue
 Write-Host "  ✓ OpenClaw: $OpenClawDir" -ForegroundColor Green
 
-# ── 4. Configure API key ──
+# ── 5. Configure API key ──
 Write-Host ""
-Write-Host "[4/4] Configuring API key..." -ForegroundColor Yellow
+Write-Host "[5/5] Configuring API key..." -ForegroundColor Yellow
 
 $currentKey = [Environment]::GetEnvironmentVariable("NICE_TOKEN_API_KEY", "User")
 
@@ -104,7 +128,7 @@ if ($currentKey) {
     }
 }
 
-# ── 5. Optional smoke test ──
+# ── 6. Optional smoke test ──
 Write-Host ""
 Write-Host "──────────────────────────────────────────────" -ForegroundColor Cyan
 Write-Host "  Install complete!" -ForegroundColor Green

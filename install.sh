@@ -49,7 +49,7 @@ detect_rc() {
 RC_FILE=$(detect_rc)
 
 # ── 2. Check prerequisites ──
-echo -e "${YELLOW}[1/4]${NC} Checking prerequisites..."
+echo -e "${YELLOW}[1/5]${NC} Checking prerequisites..."
 
 if ! command -v node &>/dev/null; then
     echo -e "${RED}Node.js is not installed.${NC}"
@@ -71,12 +71,29 @@ if ! command -v npm &>/dev/null; then
 fi
 echo -e "  ${GREEN}✓${NC} npm $(npm -v)"
 
-# ── 3. Install project ──
+# ── 3. Pull latest version ──
 echo ""
-echo -e "${YELLOW}[2/4]${NC} Installing nice-image CLI..."
+echo -e "${YELLOW}[2/5]${NC} Updating to latest version..."
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
+
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+    echo -e "  Pulling latest from remote..."
+    if git pull --ff-only 2>/dev/null; then
+        echo -e "  ${GREEN}✓${NC} Already up to date"
+    elif git pull --rebase 2>/dev/null; then
+        echo -e "  ${GREEN}✓${NC} Updated via rebase"
+    else
+        echo -e "  ${YELLOW}⚠${NC}  Could not pull latest — continuing with local version"
+    fi
+else
+    echo -e "  ${YELLOW}⚠${NC}  Not a git repo — skipping update check"
+fi
+
+# ── 4. Install project ──
+echo ""
+echo -e "${YELLOW}[3/5]${NC} Installing nice-image CLI..."
 
 npm install --silent
 npm run build --silent
@@ -85,9 +102,9 @@ npm install -g . --silent
 echo -e "  ${GREEN}✓${NC} nice-image installed globally"
 echo -e "  ${GREEN}✓${NC} huoke-image subcommands available"
 
-# ── 4. Install skill files ──
+# ── 5. Install skill files ──
 echo ""
-echo -e "${YELLOW}[3/4]${NC} Installing skill for Claude Code..."
+echo -e "${YELLOW}[4/5]${NC} Installing skill for Claude Code..."
 
 # Claude Code
 mkdir -p "$SKILL_DIR"
@@ -105,9 +122,9 @@ mkdir -p "$OPENCLAW_DIR"
 cp "$SCRIPT_DIR/SKILL.md" "$OPENCLAW_DIR/SKILL.md" 2>/dev/null || true
 echo -e "  ${GREEN}✓${NC} OpenClaw: $OPENCLAW_DIR"
 
-# ── 5. Configure API key ──
+# ── 6. Configure API key ──
 echo ""
-echo -e "${YELLOW}[4/4]${NC} Configuring API key..."
+echo -e "${YELLOW}[5/5]${NC} Configuring API key..."
 
 ALREADY_SET=false
 if grep -q "NICE_TOKEN_API_KEY" "$RC_FILE" 2>/dev/null; then
@@ -134,7 +151,7 @@ if [ "$ALREADY_SET" = false ]; then
     fi
 fi
 
-# ── 6. Optional smoke test ──
+# ── 7. Optional smoke test ──
 echo ""
 echo -e "${CYAN}──────────────────────────────────────────────${NC}"
 echo -e "  ${GREEN}Install complete!${NC}"
